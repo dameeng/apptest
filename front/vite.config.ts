@@ -1,6 +1,9 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { navigationApi } from './server/navigation-api.mjs'
+// The browser's Origin is this front's domain, which the backend CORS list does not allow.
+// Requests through this proxy are same-origin for the browser, so drop it before forwarding.
+const dropOrigin = (proxy: any) => proxy.on('proxyReq', (req: any) => req.removeHeader('origin'))
 export default defineConfig(({ mode }) => ({
   plugins: [vue(), navigationApi(loadEnv(mode, '.', ''))],
   server: {
@@ -40,6 +43,7 @@ export default defineConfig(({ mode }) => ({
       '/control/plate': {
         target: loadEnv(mode, '.', '').AI_SERVER_URL || 'http://localhost:8000',
         changeOrigin: true,
+        configure: dropOrigin,
         headers: { 'X-Internal-Api-Key': loadEnv(mode, '.', '').INTERNAL_API_KEY || '' },
       },
       '/api': {
@@ -47,6 +51,7 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         timeout: 0,
         proxyTimeout: 0,
+        configure: dropOrigin,
       },
     },
   },
