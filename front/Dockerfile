@@ -1,7 +1,9 @@
 # Render web service: builds the app and serves it with `vite preview`,
 # which keeps the /api, /control/plate, /tunnel-source proxies and the navigation API.
 FROM node:22-alpine
-WORKDIR /app
+# Not /app: the project has its own app/ folder, and Vite would resolve
+# /app/index.html as <root>/app/index.html instead of the real entry.
+WORKDIR /srv/routel
 
 COPY package.json package-lock.json ./
 RUN npm ci
