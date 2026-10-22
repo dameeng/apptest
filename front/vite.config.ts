@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => ({
     host: 'localhost',
     port: 8282,
     strictPort: true,
+    allowedHosts: ['.onrender.com'],
     proxy: {
       '/tunnel-source': {
         target: 'https://seoultunnel.co.kr',

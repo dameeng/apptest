@@ -1,0 +1,10 @@
+# .env is intentionally NOT ignored: Render injects it as a secret file at build time.
+node_modules
+dist
+test-results
+releases
+ROUTEL-PWA
+.backend-reference
+.backend-audit
+.publish-final
+*.zip
